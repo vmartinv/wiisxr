@@ -77,7 +77,7 @@ extern int stop;
 //extern char controllerType = 0; // 0 = standard, 1 = analog (analog fails on old games)
 extern long  PadFlags;
 
-extern virtualControllers_t virtualControllers[2];
+extern virtualControllers_t virtualControllers[4];
 
 // Use to invoke func on the mapped controller with args
 #define DO_CONTROL(Control,func,args...) \
