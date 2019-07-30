@@ -52,7 +52,7 @@ extern int stop;
 //extern char controllerType = 0; // 0 = standard, 1 = analog (analog fails on old games)
 long  PadFlags = 0;
 
-virtualControllers_t virtualControllers[2];
+virtualControllers_t virtualControllers[4];
 
 controller_t* controller_ts[num_controller_t] =
 #if defined(WII) && !defined(NO_BT)
@@ -80,13 +80,13 @@ void control_info_init(void){
 
 void pauseInput(void){
 	int i;
-	for(i=0; i<2; ++i)
+	for(i=0; i<4; ++i)
 		if(virtualControllers[i].inUse) DO_CONTROL(i, pause);
 }
 
 void resumeInput(void){
 	int i;
-	for(i=0; i<2; ++i)
+	for(i=0; i<4; ++i)
 		if(virtualControllers[i].inUse) DO_CONTROL(i, resume);
 }
 
