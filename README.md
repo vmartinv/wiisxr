@@ -1,3 +1,6 @@
+This is a fork of WiiSXR, with added multitap support. It automatically adds a multitap when more than two controls are detected.
+Warning: It has only been tested on Crash Bash.
+
 ![WiiSXR logo](./logo.png)
 
 Fork of wiisx, a GameCube/Wii/Wii U PSX emulator.
