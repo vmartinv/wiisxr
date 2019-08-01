@@ -133,7 +133,7 @@ void auto_assign_controllers(void)
 
 	// Map controllers in the priority given
 	// Outer loop: virtual controllers
-	for(i=0; i<2; ++i){
+	for(i=0; i<4; ++i){
 		// Middle loop: controller type
 		for(t=0; t<num_controller_t; ++t){
 			controller_t* type = controller_ts[t];
@@ -157,10 +157,19 @@ void auto_assign_controllers(void)
 	}
 
 	// 'Initialize' the unmapped virtual controllers
-	for(; i<2; ++i){
+	for(; i<4; ++i){
 		unassign_controller(i);
 		padType[i] = PADTYPE_NONE;
 	}
+}
+
+static inline button_t* getPointer(FILE *f, button_t* list, int size){
+	int index;
+	fread(&index, 4, 1, f);
+	return list + (index % size);
+}
+static inline button_t* getButton(FILE *f, controller_t* controller){
+	return getPointer(f, controller->buttons, controller->num_buttons);
 }
 
 int load_configurations(FILE* f, controller_t* controller){
@@ -173,42 +182,33 @@ int load_configurations(FILE* f, controller_t* controller){
 	if(memcmp(magic, actual, 4))
 		return 0;
 	
-	inline button_t* getPointer(button_t* list, int size){
-		int index;
-		fread(&index, 4, 1, f);
-		return list + (index % size);
-	}
-	inline button_t* getButton(void){
-		return getPointer(controller->buttons, controller->num_buttons);
-	}
-	
 	for(i=0; i<4; ++i){
-		controller->config_slot[i].SQU = getButton();
-		controller->config_slot[i].CRO = getButton();
-		controller->config_slot[i].CIR = getButton();
-		controller->config_slot[i].TRI = getButton();
+		controller->config_slot[i].SQU = getButton(f, controller);
+		controller->config_slot[i].CRO = getButton(f, controller);
+		controller->config_slot[i].CIR = getButton(f, controller);
+		controller->config_slot[i].TRI = getButton(f, controller);
 		
-		controller->config_slot[i].R1 = getButton();
-		controller->config_slot[i].L1 = getButton();
-		controller->config_slot[i].R2 = getButton();
-		controller->config_slot[i].L2 = getButton();
-		controller->config_slot[i].R3 = getButton();
-		controller->config_slot[i].L3 = getButton();
+		controller->config_slot[i].R1 = getButton(f, controller);
+		controller->config_slot[i].L1 = getButton(f, controller);
+		controller->config_slot[i].R2 = getButton(f, controller);
+		controller->config_slot[i].L2 = getButton(f, controller);
+		controller->config_slot[i].R3 = getButton(f, controller);
+		controller->config_slot[i].L3 = getButton(f, controller);
 
-		controller->config_slot[i].DL = getButton();
-		controller->config_slot[i].DR = getButton();
-		controller->config_slot[i].DU = getButton();
-		controller->config_slot[i].DD = getButton();
+		controller->config_slot[i].DL = getButton(f, controller);
+		controller->config_slot[i].DR = getButton(f, controller);
+		controller->config_slot[i].DU = getButton(f, controller);
+		controller->config_slot[i].DD = getButton(f, controller);
 
-		controller->config_slot[i].START  = getButton();
-		controller->config_slot[i].SELECT = getButton();
+		controller->config_slot[i].START  = getButton(f, controller);
+		controller->config_slot[i].SELECT = getButton(f, controller);
 				
 		controller->config_slot[i].analogL = 
-			getPointer(controller->analog_sources, controller->num_analog_sources);
+			getPointer(f, controller->analog_sources, controller->num_analog_sources);
 		controller->config_slot[i].analogR = 
-			getPointer(controller->analog_sources, controller->num_analog_sources);
+			getPointer(f, controller->analog_sources, controller->num_analog_sources);
 		controller->config_slot[i].exit =
-			getPointer(controller->menu_combos, controller->num_menu_combos);
+			getPointer(f, controller->menu_combos, controller->num_menu_combos);
 		fread(&controller->config_slot[i].invertedYL, 4, 1, f);
 		fread(&controller->config_slot[i].invertedYR, 4, 1, f);
 	}
