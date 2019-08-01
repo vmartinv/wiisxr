@@ -164,9 +164,9 @@ void Func_Credits()
 {
 	char CreditsInfo[512] = "";
 #ifdef HW_RVL
-	strcat(CreditsInfo,"WiiSXR Beta 2.3\n");
+	strcat(CreditsInfo,"WiiSXR Beta 2.4\n");
 #else
-	strcat(CreditsInfo,"CubeSXR Beta 2.3\n");
+	strcat(CreditsInfo,"CubeSXR Beta 2.4\n");
 #endif
 	strcat(CreditsInfo,"github.com/Mystro256/wiisxr\n");
 	strcat(CreditsInfo,"emu_kidid - general coding\n");
@@ -180,6 +180,7 @@ void Func_Credits()
 	strcat(CreditsInfo,"matguitarist - USB 2.0 Support\n");
 	strcat(CreditsInfo,"Daxtsu - LIBWUPC support\n");
 	strcat(CreditsInfo,"iiiGerardoiii - WIISXR logo\n");
+	strcat(CreditsInfo,"vmartinv - Multitap support\n");
 #endif
 
 	menu::MessageBox::getInstance().setMessage(CreditsInfo);

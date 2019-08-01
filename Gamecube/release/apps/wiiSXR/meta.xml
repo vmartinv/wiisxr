@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
  <app version="2">
    <name>WiiSXR</name>
-   <coder>Wii64 Team, matguitarist, Daxtsu, Mystro256</coder>
-   <version>Beta 2.3</version>
-   <release_date>201710030000</release_date>
+   <coder>Wii64 Team, matguitarist, Daxtsu, Mystro256, vmartinv</coder>
+   <version>Beta 2.4</version>
+   <release_date>201908010000</release_date>
    <short_description>PSX Emulator for Wii</short_description>
    <long_description>
 
@@ -24,5 +24,6 @@ Team Twiizers for Wii homebrew
 matguitarist - USB 2.0 Support
 Daxtsu - LIBWUPC support
 iiiGerardoiii - WIISXR logo
+vmartinv - Multitap support
    </long_description>
  </app>

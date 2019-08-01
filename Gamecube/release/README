@@ -1,5 +1,5 @@
 README : WiiSXR / CubeSXR
-Beta 2.3
+Beta 2.4
 
 LICENSE:
     This software is licensed under the GNU General Public License v2
@@ -87,6 +87,9 @@ CREDITS:
  * Visit us on www.emulatemii.com and http://code.google.com/p/pcsxgc
 
 CHANGE LOG:
+Beta 2.4:
+   * Add multitap support for Wii
+
 Beta 2.3:
    * Fix various filebrowser bugs
    * Speed tweaks
@@ -127,7 +130,7 @@ Beta 2.1:
      * Fixed inverted Y-axis on analog input
      * Fixed rumble
      * Fixed button presses on unused input port
-     + Added “Home” button as a menu combo for CC
+     + Added ï¿½Homeï¿½ button as a menu combo for CC
      + Added disable rumble setting
    * Network improvements
      * SMB correction to allow anonymous user and password
