@@ -133,7 +133,7 @@ void auto_assign_controllers(void)
 
 	// Map controllers in the priority given
 	// Outer loop: virtual controllers
-	for(i=0; i<2; ++i){
+	for(i=0; i<4; ++i){
 		// Middle loop: controller type
 		for(t=0; t<num_controller_t; ++t){
 			controller_t* type = controller_ts[t];
@@ -157,7 +157,7 @@ void auto_assign_controllers(void)
 	}
 
 	// 'Initialize' the unmapped virtual controllers
-	for(; i<2; ++i){
+	for(; i<4; ++i){
 		unassign_controller(i);
 		padType[i] = PADTYPE_NONE;
 	}
