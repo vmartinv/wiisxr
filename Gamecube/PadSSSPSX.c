@@ -102,6 +102,11 @@ static void PADsetMode (const int pad, const int mode)	//mode = 0 (digital) or 1
 	global.padID[pad] = padID[global.padMode2[pad] * 2 + mode];
 }
 
+static bool needsMultitap(){
+	if(virtualControllers[2].inUse || virtualControllers[3].inUse) return true;
+	return false;
+}
+
 static void UpdateState (const int pad) //Note: pad = 0 or 1
 {
 	const int vib0 = global.padVibF[pad][0] ? 1 : 0;
@@ -258,20 +263,25 @@ unsigned char sendJoystickData(const int pad, const unsigned char value, u8 *buf
 }
 
 unsigned char sendMultitapData(const int pad, const unsigned char value, u8 *buf){
-	if(pad==1){
-		global.cmdLen = 6;
-		buf[1] =  0x5a;
-		buf[2] = 0xFF ;
-		buf[3] = 0xFF ;
-		//if (global.padID[pad] == 0x79)
-		//{
-		// do some pressure stuff (this is for PS2 only!)
-		//}
-		return 0x41;
+	if(needsMultitap()){
+		if(pad==1){
+			global.cmdLen = 4;
+			buf[1] = 0x5a;
+			buf[2] = 0x00;
+			buf[3] = 0x00;
+			//if (global.padID[pad] == 0x79)
+			//{
+			// do some pressure stuff (this is for PS2 only!)
+			//}
+			return 0x41;
+		}
+		global.cmdLen = 34;
+		memcpy(buf, multitappar+1, 34);
+		return multitappar[0];
 	}
-	global.cmdLen = 34;
-    memcpy(buf, multitappar+1, 34);
-	return multitappar[0];
+	else{
+		return sendJoystickData(pad, value, buf);
+	}
 }
 
 static const u8 cmd40[8] =
