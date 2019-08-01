@@ -1,4 +1,4 @@
-This is a fork of WiiSXR, with added multitap support. It automatically adds a multitap when more than two controls are detected.
+This is a fork of WiiSXR, with added multitap support based on [https://github.com/notaz/pcsx_rearmed](https://github.com/notaz/pcsx_rearmed) implementation. It automatically adds a multitap when more than two controls are detected.
 Warning: It has only been tested on Crash Bash.
 
 ![WiiSXR logo](./logo.png)
