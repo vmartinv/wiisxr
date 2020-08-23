@@ -42,8 +42,7 @@
 #include "wiiSXconfig.h"
 #include "PadSSSPSX.h"
 
-PadDataS lastport1;
-PadDataS lastport2;
+PadDataS lastport[4];
 
 extern void SysPrintf(char *fmt, ...);
 extern int stop;

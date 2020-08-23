@@ -44,8 +44,7 @@
 
 //static BUTTONS PAD_1;
 //static BUTTONS PAD_2;
-extern PadDataS lastport1;
-extern PadDataS lastport2;
+extern PadDataS lastport[4];
 static int pad_initialized = 0;
 
 static struct
@@ -150,18 +149,9 @@ static void UpdateState (const int pad) //Note: pad = 0 or 1
 
 	global.padStat[pad] = (((PAD_Data.btns.All>>8)&0xFF) | ( (PAD_Data.btns.All<<8) & 0xFF00 )) &0xFFFF;
 
-	if (pad==0)
-	{
-		lastport1.leftJoyX = PAD_Data.leftStickX; lastport1.leftJoyY = PAD_Data.leftStickY;
-		lastport1.rightJoyX = PAD_Data.rightStickX; lastport1.rightJoyY = PAD_Data.rightStickY;
-		lastport1.buttonStatus = global.padStat[pad];
-	}
-	else
-	{
-		lastport2.leftJoyX = PAD_Data.leftStickX; lastport2.leftJoyY = PAD_Data.leftStickY;
-		lastport2.rightJoyX = PAD_Data.rightStickX; lastport2.rightJoyY = PAD_Data.rightStickY;
-		lastport2.buttonStatus = global.padStat[pad];
-	}
+	lastport[pad].leftJoyX = PAD_Data.leftStickX; lastport[pad].leftJoyY = PAD_Data.leftStickY;
+	lastport[pad].rightJoyX = PAD_Data.rightStickX; lastport[pad].rightJoyY = PAD_Data.rightStickY;
+	lastport[pad].buttonStatus = global.padStat[pad];
 	
 	/* Small Motor */
 	if ((global.padVibF[pad][2] != vib0) )
@@ -189,10 +179,10 @@ static void UpdateMultitapState (const int pad) //Note: pad = 0 or 1
 			multitapBuffer[offset + 1] = 0x73;
 			multitapBuffer[offset + 2] = global.padModeC[i] ? 0x00 : 0x5a;
 			*((u16*)(multitapBuffer + offset + 3)) = global.padStat[i];
-			multitapBuffer[offset + 5] = i ? lastport2.rightJoyX : lastport1.rightJoyX ;
-			multitapBuffer[offset + 6] = i ? lastport2.rightJoyY : lastport1.rightJoyY ;
-			multitapBuffer[offset + 7] = i ? lastport2.leftJoyX : lastport1.leftJoyX ;
-			multitapBuffer[offset + 8] = i ? lastport2.leftJoyY : lastport1.leftJoyY ;
+			multitapBuffer[offset + 5] = lastport[i].rightJoyX;
+			multitapBuffer[offset + 6] = lastport[i].rightJoyY;
+			multitapBuffer[offset + 7] = lastport[i].leftJoyX;
+			multitapBuffer[offset + 8] = lastport[i].leftJoyY;
 		}
 		else{
 			multitapBuffer[offset + 1] = 0x41;
@@ -207,12 +197,12 @@ long SSS_PADopen (void *p)
 	if (!pad_initialized)
 	{
 		memset (&global, 0, sizeof (global));
-		memset( &lastport1, 0, sizeof(lastport1) ) ;
-		memset( &lastport2, 0, sizeof(lastport2) ) ;
-		global.padStat[0] = 0xffff;
-		global.padStat[1] = 0xffff;
-		PADsetMode (0, controllerType == CONTROLLERTYPE_ANALOG ? 1 : 0);  //port 0, analog
-		PADsetMode (1, controllerType == CONTROLLERTYPE_ANALOG ? 1 : 0);  //port 1, analog
+		memset (&lastport, 0, sizeof (lastport));
+		int i;
+    	for(i = 0; i < 4; i++) {
+			global.padStat[i] = 0xffff;
+			PADsetMode (i, controllerType == CONTROLLERTYPE_ANALOG ? 1 : 0);  //port i, analog
+		}
 	}
 	return 0;
 }
@@ -249,10 +239,10 @@ unsigned char SendJoystickData(const int pad, const unsigned char value, u8 *buf
 	}
 	else
 	{
-		buf[4] = pad ? lastport2.rightJoyX : lastport1.rightJoyX ;
-		buf[5] = pad ? lastport2.rightJoyY : lastport1.rightJoyY ;
-		buf[6] = pad ? lastport2.leftJoyX : lastport1.leftJoyX ;
-		buf[7] = pad ? lastport2.leftJoyY : lastport1.leftJoyY ;
+		buf[4] = lastport[pad].rightJoyX ;
+		buf[5] = lastport[pad].rightJoyY ;
+		buf[6] = lastport[pad].leftJoyX ;
+		buf[7] = lastport[pad].leftJoyY ;
 		//if (global.padID[pad] == 0x79)
 		//{
 		// do some pressure stuff (this is for PS2 only!)
@@ -268,10 +258,6 @@ unsigned char SendMultitapData(const int pad, const unsigned char value, u8 *buf
 			buf[1] = 0x5a;
 			buf[2] = 0x00;
 			buf[3] = 0x00;
-			//if (global.padID[pad] == 0x79)
-			//{
-			// do some pressure stuff (this is for PS2 only!)
-			//}
 			return 0x41;
 		}
 		global.cmdLen = 34;
@@ -354,7 +340,7 @@ unsigned char SSS_PADpoll (const unsigned char value)
 		case 0x42:
 			UpdateMultitapState (pad);
 		case 0x43:
-			return sendMultitapData(pad, value, buf.b8);
+			return SendMultitapData(pad, value, buf.b8);
 			break;
 		case 0x44:
 			global.cmdLen = sizeof (cmd44);
@@ -500,7 +486,7 @@ long SSS_PADreadPort1 (PadDataS* pads)
 		pads->rightJoyX = PAD_1.rightStickX; pads->rightJoyY = PAD_1.rightStickY;
 	}
 
-	memcpy( &lastport1, pads, sizeof( lastport1 ) ) ;
+	memcpy( &lastport[0], pads, sizeof( lastport[0] ) ) ;
 */
 	return 0;
 }
@@ -543,7 +529,7 @@ long SSS_PADreadPort2 (PadDataS* pads)
 		pads->rightJoyX = PAD_2.rightStickX; pads->rightJoyY = PAD_2.rightStickY;
 	}
 
-	memcpy( &lastport2, pads, sizeof( lastport1 ) ) ;
+	memcpy( &lastport[1], pads, sizeof( lastport[1] ) ) ;
 */
 	return 0;
 }
