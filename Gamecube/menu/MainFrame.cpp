@@ -180,7 +180,6 @@ void Func_Credits()
 	strcat(CreditsInfo,"matguitarist - USB 2.0 Support\n");
 	strcat(CreditsInfo,"Daxtsu - LIBWUPC support\n");
 	strcat(CreditsInfo,"iiiGerardoiii - WIISXR logo\n");
-	strcat(CreditsInfo,"vmartinv - Multitap support\n");
 #endif
 
 	menu::MessageBox::getInstance().setMessage(CreditsInfo);
