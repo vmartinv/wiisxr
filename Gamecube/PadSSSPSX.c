@@ -70,7 +70,7 @@ static struct
 	int cmdLen;			//# of bytes in pad reply
 } global;
 
-unsigned char multitappar[35] = { 0x80, 0x00, 0x5a, 0x41, 0x5a, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+unsigned char multitapBuffer[35] = { 0x80, 0x00, 0x5a, 0x41, 0x5a, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 													0x41, 0x5a, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 													0x41, 0x5a, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 													0x41, 0x5a, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
@@ -102,7 +102,7 @@ static void PADsetMode (const int pad, const int mode)	//mode = 0 (digital) or 1
 	global.padID[pad] = padID[global.padMode2[pad] * 2 + mode];
 }
 
-static bool needsMultitap(){
+static bool NeedsMultitap(){
 	if(virtualControllers[2].inUse || virtualControllers[3].inUse) return true;
 	return false;
 }
@@ -187,18 +187,18 @@ static void UpdateMultitapState (const int pad) //Note: pad = 0 or 1
 		UpdateState(i);
     	offset = 2 + (i * 8);
 		if(global.padMode1[i]==1){ //analog
-			multitappar[offset + 1] = 0x73;
-			multitappar[offset + 2] = global.padModeC[i] ? 0x00 : 0x5a;
-			*((u16*)(multitappar + offset + 3)) = global.padStat[i];
-			multitappar[offset + 5] = i ? lastport2.rightJoyX : lastport1.rightJoyX ;
-			multitappar[offset + 6] = i ? lastport2.rightJoyY : lastport1.rightJoyY ;
-			multitappar[offset + 7] = i ? lastport2.leftJoyX : lastport1.leftJoyX ;
-			multitappar[offset + 8] = i ? lastport2.leftJoyY : lastport1.leftJoyY ;
+			multitapBuffer[offset + 1] = 0x73;
+			multitapBuffer[offset + 2] = global.padModeC[i] ? 0x00 : 0x5a;
+			*((u16*)(multitapBuffer + offset + 3)) = global.padStat[i];
+			multitapBuffer[offset + 5] = i ? lastport2.rightJoyX : lastport1.rightJoyX ;
+			multitapBuffer[offset + 6] = i ? lastport2.rightJoyY : lastport1.rightJoyY ;
+			multitapBuffer[offset + 7] = i ? lastport2.leftJoyX : lastport1.leftJoyX ;
+			multitapBuffer[offset + 8] = i ? lastport2.leftJoyY : lastport1.leftJoyY ;
 		}
 		else{
-			multitappar[offset + 1] = 0x41;
-			multitappar[offset + 2] = global.padModeC[i] ? 0x00 : 0x5a;
-			*((u16*)(multitappar + offset + 3)) = global.padStat[i];
+			multitapBuffer[offset + 1] = 0x41;
+			multitapBuffer[offset + 2] = global.padModeC[i] ? 0x00 : 0x5a;
+			*((u16*)(multitapBuffer + offset + 3)) = global.padStat[i];
 		}
     }
 }
@@ -238,7 +238,7 @@ unsigned char SSS_PADstartPoll (int pad)
 	return 0xff;
 }
 
-unsigned char sendJoystickData(const int pad, const unsigned char value, u8 *buf){
+unsigned char SendJoystickData(const int pad, const unsigned char value, u8 *buf){
 	global.cmdLen = 2 + 2 * (global.padID[pad] & 0x0f);
 	buf[1] = global.padModeC[pad] ? 0x00 : 0x5a;
 	((u16*)buf)[1] = global.padStat[pad];
@@ -262,8 +262,8 @@ unsigned char sendJoystickData(const int pad, const unsigned char value, u8 *buf
 	}
 }
 
-unsigned char sendMultitapData(const int pad, const unsigned char value, u8 *buf){
-	if(needsMultitap()){
+unsigned char SendMultitapData(const int pad, const unsigned char value, u8 *buf){
+	if(NeedsMultitap()){
 		if(pad==1){
 			global.cmdLen = 4;
 			buf[1] = 0x5a;
@@ -276,11 +276,11 @@ unsigned char sendMultitapData(const int pad, const unsigned char value, u8 *buf
 			return 0x41;
 		}
 		global.cmdLen = 34;
-		memcpy(buf, multitappar+1, 34);
-		return multitappar[0];
+		memcpy(buf, multitapBuffer+1, 34);
+		return multitapBuffer[0];
 	}
 	else{
-		return sendJoystickData(pad, value, buf);
+		return SendJoystickData(pad, value, buf);
 	}
 }
 

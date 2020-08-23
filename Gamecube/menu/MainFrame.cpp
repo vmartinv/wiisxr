@@ -164,9 +164,9 @@ void Func_Credits()
 {
 	char CreditsInfo[512] = "";
 #ifdef HW_RVL
-	strcat(CreditsInfo,"WiiSXR Beta 2.4\n");
+	strcat(CreditsInfo,"WiiSXR Beta 2.3\n");
 #else
-	strcat(CreditsInfo,"CubeSXR Beta 2.4\n");
+	strcat(CreditsInfo,"CubeSXR Beta 2.3\n");
 #endif
 	strcat(CreditsInfo,"github.com/Mystro256/wiisxr\n");
 	strcat(CreditsInfo,"emu_kidid - general coding\n");
