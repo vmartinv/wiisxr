@@ -238,66 +238,6 @@ void Func_AssignPad(int i)
 			type = &controller_Classic;
 		else
 			type = &controller_WiimoteNunchuk;
-<<<<<<< HEAD
-		break;
-#endif
-	}
-	assign_controller(i, type, (int) padAssign[i]);
-}
-
-void Func_TogglePad0Type()
-{
-	int i = PADASSIGN_INPUT0;
-#ifdef HW_RVL
-	padType[i] = (padType[i]+1) %3;
-#else
-	padType[i] = (padType[i]+1) %2;
-#endif
-
-	if (padType[i]) Func_AssignPad(i);
-	else			unassign_controller(i);
-	pMenuContext->getFrame(MenuContext::FRAME_CONFIGUREINPUT)->activateSubmenu(ConfigureInputFrame::SUBMENU_REINIT);
-}
-
-void Func_TogglePad1Type()
-{
-	int i = PADASSIGN_INPUT1;
-#ifdef HW_RVL
-	padType[i] = (padType[i]+1) %3;
-#else
-	padType[i] = (padType[i]+1) %2;
-#endif
-
-	if (padType[i]) Func_AssignPad(i);
-	else			unassign_controller(i);
-	pMenuContext->getFrame(MenuContext::FRAME_CONFIGUREINPUT)->activateSubmenu(ConfigureInputFrame::SUBMENU_REINIT);
-}
-
-void Func_TogglePad0Assign()
-{
-	int i = PADASSIGN_INPUT0;
-	padAssign[i] = (padAssign[i]+1) %4;
-
-	if (padType[i]) Func_AssignPad(i);
-
-	pMenuContext->getFrame(MenuContext::FRAME_CONFIGUREINPUT)->activateSubmenu(ConfigureInputFrame::SUBMENU_REINIT);
-}
-
-void Func_TogglePad1Assign()
-{
-	int i = PADASSIGN_INPUT1;
-	padAssign[i] = (padAssign[i]+1) %4;
-
-	if (padType[i]) Func_AssignPad(i);
-
-	pMenuContext->getFrame(MenuContext::FRAME_CONFIGUREINPUT)->activateSubmenu(ConfigureInputFrame::SUBMENU_REINIT);
-}
-
-void Func_ReturnFromConfigureInputFrame()
-{
-	pMenuContext->setActiveFrame(MenuContext::FRAME_SETTINGS,SettingsFrame::SUBMENU_INPUT);
-}
-=======
 		break;
 #endif
 	}
@@ -404,4 +344,3 @@ void Func_ReturnFromConfigureInputFrame()
 {
 	pMenuContext->setActiveFrame(MenuContext::FRAME_SETTINGS,SettingsFrame::SUBMENU_INPUT);
 }
->>>>>>> a1c882a... not working multitap on slot 2
