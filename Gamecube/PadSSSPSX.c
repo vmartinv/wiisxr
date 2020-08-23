@@ -103,8 +103,7 @@ static void PADsetMode (const int pad, const int mode)	//mode = 0 (digital) or 1
 }
 
 static bool NeedsMultitap(){
-	if(virtualControllers[2].inUse || virtualControllers[3].inUse) return true;
-	return false;
+	return virtualControllers[2].inUse || virtualControllers[3].inUse;
 }
 
 static void UpdateState (const int pad) //Note: pad = 0 or 1
