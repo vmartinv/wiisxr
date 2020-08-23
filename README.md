@@ -1,5 +1,5 @@
 This is a fork of WiiSXR, with added multitap support based on [https://github.com/notaz/pcsx_rearmed](https://github.com/notaz/pcsx_rearmed) implementation. It automatically adds a multitap when more than two controls are detected.
-Warning: It has only been tested on Crash Bash.
+This version should allow you to play with 3-8 players. Warning: It has only been tested on Crash Bash on Wii and had some trouble with it. 
 
 ![WiiSXR logo](./logo.png)
 
